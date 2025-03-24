@@ -18,8 +18,17 @@ RUN apt-get update && apt-get install -y \
   && apt-get clean \
   && docker-php-ext-install zip pdo_mysql mysqli 
 
+# Установка sass
+RUN npm install -g sass
+
 # install xdebug
 RUN pecl install xdebug \
   && docker-php-ext-enable xdebug
 
 COPY php.ini /usr/local/etc/php
+
+# Вклбчно apache rewrite
+RUN ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load
+
+# установка composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
